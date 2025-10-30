@@ -80,6 +80,7 @@ export class Header implements OnInit {
   }
   logout() {
     this.userAuth.logout();
+    this.userAuth.googleLogout();
     this.router.navigate(['/home']);
     this.closeProfileMenu();
   }

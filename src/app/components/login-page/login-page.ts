@@ -51,6 +51,10 @@ export class LoginPage implements OnInit {
     return this.loginForm.controls.password.value;
   }
 
+  googleLogin() {
+    this.userAuthService.googleLogin();
+  }
+
   loginUser() {
     if (this.loginForm.valid) {
       const { email, password } = this.loginForm.value;
