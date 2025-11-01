@@ -155,7 +155,6 @@ export class Header implements OnInit {
 
   removeItem(id: string) {
     this.cartService.removeFromCart(id);
-    this.cartService.getCartItems();
   }
 
   logout() {

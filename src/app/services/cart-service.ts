@@ -1,41 +1,71 @@
-import { Injectable } from '@angular/core';
+import { Injectable, OnInit } from '@angular/core';
 import { BehaviorSubject } from 'rxjs';
 import { ICourse } from '../Interfaces/icourse';
+import { HttpClient } from '@angular/common/http';
+import ResponseEntity from '../Interfaces/ResponseEntity';
+import IUser from '../Interfaces/IUser';
 
 @Injectable({
   providedIn: 'root',
 })
 export class CartService {
+  constructor(private http: HttpClient) {}
+
+  private apiUrl = 'http://localhost:3000/api/users/cart';
   private cartItems = new BehaviorSubject<ICourse[]>([]);
   cartItems$ = this.cartItems.asObservable();
 
   addToCart(course: ICourse) {
-    const current = this.cartItems.value;
-    if (current.find((c) => c._id === course._id)) {
-      return;
-    }
-    this.cartItems.next([course, ...current]);
-    localStorage.setItem('cart', JSON.stringify([course, ...current]));
+    this.http
+      .patch<ResponseEntity>(
+        this.apiUrl,
+        { courseId: course._id },
+        {
+          headers: {
+            'Content-Type': 'application/json',
+            Authorization: `${localStorage.getItem('userToken')}`,
+          },
+        }
+      )
+      .subscribe({
+        next: (response): void => {
+          this.cartItems.next(response.data.cart);
+        },
+        error: (err): void => console.error('Error adding course to cart', err),
+      });
   }
 
   getCartItems() {
-    const cart = localStorage.getItem('cart');
-    if (cart) {
-      this.cartItems.next(JSON.parse(cart));
-    } else {
-      this.cartItems.next([]);
-    }
+    this.http
+      .get<ResponseEntity>(
+        `${this.apiUrl}/${JSON.parse(localStorage.getItem('userData') || '{}').userId}`,
+        {
+          headers: { Authorization: `${localStorage.getItem('userToken')}` },
+        }
+      )
+      .subscribe({
+        next: (response): void => this.cartItems.next(response.data),
+        error: (err): void => console.error('Error fetching cart items', err),
+      });
   }
 
   removeFromCart(courseId: string) {
-    const current = this.cartItems.value;
-    const updated = current.filter((c) => c._id !== courseId);
-    this.cartItems.next(updated);
-    localStorage.setItem('cart', JSON.stringify(updated));
-  }
-
-  clearCart() {
-    this.cartItems.next([]);
-    localStorage.removeItem('cart');
+    this.http
+      .patch<ResponseEntity>(
+        this.apiUrl,
+        { courseId },
+        {
+          headers: {
+            'Content-Type': 'application/json',
+            Authorization: `${localStorage.getItem('userToken')}`,
+          },
+        }
+      )
+      .subscribe({
+        next: (response): void => {
+          this.cartItems.next(response.data.cart);
+        },
+        error: (err): void => console.error('Error removing course from cart', err),
+      });
   }
 }
