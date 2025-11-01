@@ -17,7 +17,9 @@ export class Header implements OnInit {
   isProfileShown = signal(false);
   isCartShown = signal(false);
   isMenuOpen = false;
-  userData!: IUser;
+  user!: IUser;
+  userData!: Observable<IUser>;
+
   isUserLoggedIn!: Observable<boolean>;
   cartItems!: Observable<ICourse[]>;
 
@@ -36,14 +38,24 @@ export class Header implements OnInit {
     const profileMenu = document.querySelector('[data-profileMenu="true"]');
     const profileButton = target.closest('button[class*="cursor-pointer"]');
 
-    if (this.isProfileShown() && profileMenu && !profileMenu.contains(target) && !this.isProfileButton(target)) {
+    if (
+      this.isProfileShown() &&
+      profileMenu &&
+      !profileMenu.contains(target) &&
+      !this.isProfileButton(target)
+    ) {
       this.isProfileShown.set(false);
     }
 
     // Check if click is outside cart menu
     const cartMenu = document.querySelector('[data-cartMenu="true"]');
 
-    if (this.isCartShown() && cartMenu && !cartMenu.contains(target) && !this.isCartButton(target)) {
+    if (
+      this.isCartShown() &&
+      cartMenu &&
+      !cartMenu.contains(target) &&
+      !this.isCartButton(target)
+    ) {
       this.isCartShown.set(false);
     }
 
@@ -140,9 +152,12 @@ export class Header implements OnInit {
 
   ngOnInit() {
     this.isUserLoggedIn = this.userAuth.authStatus$;
+    this.userData = this.userAuth.userProfile$;
     this.cartItems = this.cartService.cartItems$;
-    this.cartService.getCartItems();
-    this.userData = JSON.parse(localStorage.getItem('userData') || '{}');
+    if (this.userAuth.isAuthenticated() || this.userAuth.isLoggedIn) {
+      this.user = JSON.parse(localStorage.getItem('userData') || '{}');
+      this.cartService.getCartItems();
+    }
   }
 
   getCartTotal(): number {

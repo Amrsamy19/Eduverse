@@ -41,6 +41,8 @@ export class DisplayCoursedetailsComponent implements OnInit {
 
   cartItems = signal<ICourse[]>([]);
 
+  watchLaterList = signal<ICourse[]>([]);
+
   constructor(
     private location: Location,
     private router: Router,
@@ -62,11 +64,13 @@ export class DisplayCoursedetailsComponent implements OnInit {
     this.cartService.cartItems$.subscribe((items) => {
       this.cartItems.set(items);
     });
+    this.watchLater.watchLater$.subscribe((items) => {
+      this.watchLaterList.set(items);
+    });
   }
-isInCart(id: string): boolean {
-  return this.cartItems().some(item => item._id === id);
-}
-
+  isInCart(id: string): boolean {
+    return this.cartItems().some((item) => item._id === id);
+  }
 
   addToCart(course: ICourse): void {
     this.cartService.addToCart(course);
@@ -112,5 +116,9 @@ isInCart(id: string): boolean {
 
   handleWatchLater() {
     this.watchLater.toggleCourseToWatchLater(this.router.url.split('/')[2]);
+  }
+
+  isInWatchLater(id: string): boolean {
+    return this.watchLaterList().some((item) => item._id === id);
   }
 }

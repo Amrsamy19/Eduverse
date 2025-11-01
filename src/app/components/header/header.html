@@ -2,7 +2,6 @@
 <nav class="bg-violet-950 shadow-lg fixed w-full z-50 top-0">
   <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
     <div class="flex items-center justify-between h-16">
-
       <!-- Logo and brand name -->
       <a routerLink="/" class="flex items-center space-x-2 flex-shrink-0">
         <img src="logo.png" class="h-8 w-8" alt="Eduverse Logo" />
@@ -72,9 +71,7 @@
 
       <!-- Right section (Auth buttons, Cart, Profile, Hamburger) -->
       <div class="flex items-center space-x-3">
-
-        @let auth = (isUserLoggedIn | async);
-        @let items = (cartItems | async);
+        @let auth = (isUserLoggedIn | async); @let items = (cartItems | async);
 
         <!-- Desktop Auth Buttons (Not logged in) -->
         @if(!auth){
@@ -113,10 +110,14 @@
             >
               <circle cx="8" cy="21" r="1" />
               <circle cx="19" cy="21" r="1" />
-              <path d="M2.05 2.05h2l2.66 12.42a2 2 0 0 0 2 1.58h9.78a2 2 0 0 0 1.95-1.57l1.65-7.43H5.12" />
+              <path
+                d="M2.05 2.05h2l2.66 12.42a2 2 0 0 0 2 1.58h9.78a2 2 0 0 0 1.95-1.57l1.65-7.43H5.12"
+              />
             </svg>
             @if(items?.length){
-            <span class="absolute -top-2 -right-2 px-1.5 py-0.5 bg-green-300 rounded-full text-violet-900 text-xs font-bold min-w-[20px] text-center">
+            <span
+              class="absolute -top-2 -right-2 px-1.5 py-0.5 bg-green-300 rounded-full text-violet-900 text-xs font-bold min-w-[20px] text-center"
+            >
               {{ items?.length }}
             </span>
             }
@@ -152,21 +153,31 @@
           <span class="sr-only">Open main menu</span>
           <svg
             class="w-6 h-6"
-            [ngClass]="{ 'hidden': isMenuOpen }"
+            [ngClass]="{ hidden: isMenuOpen }"
             fill="none"
             viewBox="0 0 24 24"
             stroke="currentColor"
           >
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />
+            <path
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              stroke-width="2"
+              d="M4 6h16M4 12h16M4 18h16"
+            />
           </svg>
           <svg
             class="w-6 h-6"
-            [ngClass]="{ 'hidden': !isMenuOpen }"
+            [ngClass]="{ hidden: !isMenuOpen }"
             fill="none"
             viewBox="0 0 24 24"
             stroke="currentColor"
           >
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+            <path
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              stroke-width="2"
+              d="M6 18L18 6M6 6l12 12"
+            />
           </svg>
         </button>
       </div>
@@ -175,7 +186,7 @@
 
   <!-- Mobile Menu -->
   <div
-    [ngClass]="{ 'hidden': !isMenuOpen, 'block': isMenuOpen }"
+    [ngClass]="{ hidden: !isMenuOpen, block: isMenuOpen }"
     class="lg:hidden border-t border-violet-800"
   >
     <div class="px-4 pt-2 pb-4 space-y-2">
@@ -264,8 +275,7 @@
           class="w-full cursor-pointer flex items-center justify-between px-4 py-2 text-white text-sm font-medium rounded-lg hover:bg-white/5 transition-all"
         >
           <span>Cart</span>
-          @let items = (cartItems | async);
-          @if(items?.length){
+          @let items = (cartItems | async); @if(items?.length){
           <span class="px-2 py-1 bg-green-300 rounded-full text-violet-900 text-xs font-bold">
             {{ items?.length }}
           </span>
@@ -307,6 +317,7 @@
 >
   <div class="p-4">
     <!-- Profile Header -->
+    @if(userData | async){
     <div class="flex items-center gap-3 pb-4 border-b border-white/20">
       <svg
         xmlns="http://www.w3.org/2000/svg"
@@ -325,10 +336,11 @@
         <circle cx="12" cy="12" r="10" />
       </svg>
       <div class="min-w-0 flex-1">
-        <p class="text-lg font-bold text-white truncate">{{ userData.name || 'User' }}</p>
-        <p class="text-sm text-white/70 truncate">{{ userData.email }}</p>
+        <p class="text-lg font-bold text-white truncate">{{ user.name || 'User' }}</p>
+        <p class="text-sm text-white/70 truncate">{{ user.email }}</p>
       </div>
     </div>
+    }
 
     <!-- Profile Actions -->
     <div class="mt-4 space-y-2">
@@ -425,48 +437,47 @@
     Cart Items
   </h3>
 
-  <div class="flex-1 flex flex-col overflow-hidden ">
+  <div class="flex-1 flex flex-col overflow-hidden">
     <!-- Cart Items List -->
     <ul class="flex-1 flex flex-col gap-3 p-4 overflow-y-auto">
-      @let items = (cartItems | async);
-      @if(items?.length){
-        @for(item of items; track item._id){
-        <li class="flex items-center gap-3 bg-white/5 backdrop-blur-sm p-3 rounded-lg hover:bg-white/10 transition-all">
-          <img
-            [src]="item?.courseCover"
-            [alt]="item?.courseName"
-            class="w-16 h-16 rounded-lg object-cover flex-shrink-0"
-          />
-          <div class="flex-1 min-w-0">
-            <p class="text-white text-sm font-semibold truncate">{{ item?.courseName }}</p>
-            <p class="text-green-300 text-sm font-bold">${{ item?.price }}</p>
-          </div>
-          <button
-            (click)="removeItem(item._id)"
-            class="flex-shrink-0 p-2 hover:bg-red-500/20 rounded-lg transition-all group"
+      @let items = (cartItems | async); @if(items?.length){ @for(item of items; track item._id){
+      <li
+        class="flex items-center gap-3 bg-white/5 backdrop-blur-sm p-3 rounded-lg hover:bg-white/10 transition-all"
+      >
+        <img
+          [src]="item?.courseCover"
+          [alt]="item?.courseName"
+          class="w-16 h-16 rounded-lg object-cover flex-shrink-0"
+        />
+        <div class="flex-1 min-w-0">
+          <p class="text-white text-sm font-semibold truncate">{{ item?.courseName }}</p>
+          <p class="text-green-300 text-sm font-bold">${{ item?.price }}</p>
+        </div>
+        <button
+          (click)="removeItem(item._id)"
+          class="flex-shrink-0 p-2 hover:bg-red-500/20 rounded-lg transition-all group"
+        >
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            width="20"
+            height="20"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="white"
+            stroke-width="2"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            class="group-hover:stroke-red-400 transition-colors"
           >
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              width="20"
-              height="20"
-              viewBox="0 0 24 24"
-              fill="none"
-              stroke="white"
-              stroke-width="2"
-              stroke-linecap="round"
-              stroke-linejoin="round"
-              class="group-hover:stroke-red-400 transition-colors"
-            >
-              <path d="M10 11v6" />
-              <path d="M14 11v6" />
-              <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6" />
-              <path d="M3 6h18" />
-              <path d="M8 6V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2" />
-            </svg>
-          </button>
-        </li>
-        }
-      } @else {
+            <path d="M10 11v6" />
+            <path d="M14 11v6" />
+            <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6" />
+            <path d="M3 6h18" />
+            <path d="M8 6V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2" />
+          </svg>
+        </button>
+      </li>
+      } } @else {
       <li class="flex items-center justify-center h-full">
         <div class="text-center p-8">
           <svg
@@ -483,7 +494,9 @@
           >
             <circle cx="8" cy="21" r="1" />
             <circle cx="19" cy="21" r="1" />
-            <path d="M2.05 2.05h2l2.66 12.42a2 2 0 0 0 2 1.58h9.78a2 2 0 0 0 1.95-1.57l1.65-7.43H5.12" />
+            <path
+              d="M2.05 2.05h2l2.66 12.42a2 2 0 0 0 2 1.58h9.78a2 2 0 0 0 1.95-1.57l1.65-7.43H5.12"
+            />
           </svg>
           <p class="text-white/70 font-medium">Your cart is empty</p>
         </div>

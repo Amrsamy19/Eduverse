@@ -29,6 +29,22 @@
     class="relative me-3 text-violet-900 border-2 rounded-full p-2 md:p-5 border-violet-900 hover:cursor-pointer hover:text-violet-500 hover:border-violet-500 hover:scale-105 transition duration-150 whitespace-nowrap group"
     (click)="handleWatchLater()"
   >
+    @if(isInWatchLater(data!._id)){
+    <svg
+      xmlns="http://www.w3.org/2000/svg"
+      class="lucide lucide-clock-plus-icon lucide-clock-plus md:w-7 md:h-7 w-3 h-3 left-0 top-0 absolute translate-1/5 transition duration-150 group-hover:stroke-violet-600"
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="currentColor"
+      stroke-width="2"
+      stroke-linecap="round"
+      stroke-linejoin="round"
+    >
+      <path d="M12 6v6l4 2" />
+      <path d="M22 12a10 10 0 1 0-11 9.95" />
+      <path d="m22 16-5.5 5.5L14 19" />
+    </svg>
+    }@else {
     <svg
       xmlns="http://www.w3.org/2000/svg"
       class="lucide lucide-clock-plus-icon lucide-clock-plus md:w-7 md:h-7 w-3 h-3 left-0 top-0 absolute translate-1/5 transition duration-150 group-hover:stroke-violet-600"
@@ -44,6 +60,7 @@
       <path d="M19 16v6" />
       <path d="M21.92 13.267a10 10 0 1 0-8.653 8.653" />
     </svg>
+    }
   </button>
 </div>
 <!-- Card Grid Container -->
@@ -56,7 +73,7 @@
       <img
         src="{{ data?.courseCover }}"
         alt="Course visual illustration"
-        class="w-full lg:max-h-52 rounded-xl shadow-lg object-cover "
+        class="w-full lg:max-h-52 rounded-xl shadow-lg object-cover"
       />
     </div>
 
