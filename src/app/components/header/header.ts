@@ -148,7 +148,7 @@ export class Header implements OnInit {
     this.cartItems.subscribe((items) => {
       total = items.reduce((total, item) => total + item.price!, 0);
     });
-    return total;
+    return +total.toFixed(2);
   }
 
   removeItem(id: string) {

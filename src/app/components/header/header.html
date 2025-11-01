@@ -98,7 +98,7 @@
         @if(auth){
         <div class="hidden lg:flex items-center space-x-4">
           <!-- Cart Icon -->
-          <button class="relative" (click)="toggleCartMenu()">
+          <button class="relative cursor-pointer" (click)="toggleCartMenu()">
             <svg
               xmlns="http://www.w3.org/2000/svg"
               width="24"
@@ -134,7 +134,7 @@
               stroke-width="2"
               stroke-linecap="round"
               stroke-linejoin="round"
-              class="hover:stroke-green-300 transition-colors"
+              class="hover:stroke-green-300 transition-colors cursor-pointer"
             >
               <circle cx="12" cy="8" r="5" />
               <path d="M20 21a8 8 0 0 0-16 0" />
@@ -261,7 +261,7 @@
       <div class="pt-4 space-y-2 border-t border-violet-800">
         <button
           (click)="toggleCartMenu()"
-          class="w-full flex items-center justify-between px-4 py-2 text-white text-sm font-medium rounded-lg hover:bg-white/5 transition-all"
+          class="w-full cursor-pointer flex items-center justify-between px-4 py-2 text-white text-sm font-medium rounded-lg hover:bg-white/5 transition-all"
         >
           <span>Cart</span>
           @let items = (cartItems | async);
@@ -273,7 +273,7 @@
         </button>
         <button
           (click)="toggleProfileMenu()"
-          class="w-full flex items-center justify-between px-4 py-2 text-white text-sm font-medium rounded-lg hover:bg-white/5 transition-all"
+          class="w-full cursor-pointer flex items-center justify-between px-4 py-2 text-white text-sm font-medium rounded-lg hover:bg-white/5 transition-all"
         >
           <span>Profile</span>
           <svg
@@ -419,13 +419,13 @@
   data-cartMenu="true"
   animate.enter="enter-cart-animation"
   animate.leave="leave-cart-animation"
-  class="fixed top-16 right-2 sm:right-4 lg:right-8 w-[calc(100%-1rem)] sm:w-96 max-h-[calc(100vh-5rem)] bg-gradient-to-br from-violet-950 via-violet-900 to-violet-800 backdrop-blur-xl rounded-lg shadow-2xl z-50 border border-violet-700/50 flex flex-col"
+  class="fixed top-16 right-2 sm:right-4 lg:right-8 w-[calc(100%-1rem)] sm:w-96 max-h-[calc(100vh-5rem)] bg-gradient-to-br from-violet-950 via-violet-900 to-violet-800 backdrop-blur-xl rounded-lg shadow-2xl z-[600] border border-violet-700/50 flex flex-col"
 >
   <h3 class="text-white text-xl sm:text-2xl text-center font-bold p-4 border-b border-white/20">
     Cart Items
   </h3>
 
-  <div class="flex-1 flex flex-col overflow-hidden">
+  <div class="flex-1 flex flex-col overflow-hidden ">
     <!-- Cart Items List -->
     <ul class="flex-1 flex flex-col gap-3 p-4 overflow-y-auto">
       @let items = (cartItems | async);
