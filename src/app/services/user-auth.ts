@@ -93,6 +93,7 @@ export class UserAuth {
 
   googleLogin(): void {
     this.oauthService.initLoginFlow();
+    console.log('test in login ');
   }
 
   googleLogout(): void {
@@ -105,34 +106,29 @@ export class UserAuth {
 
   async googleConfiguration(): Promise<void> {
     this.oauthService.configure(authConfig);
-    this.oauthService.loadDiscoveryDocumentAndTryLogin();
+    await this.oauthService.loadDiscoveryDocumentAndTryLogin();
+
+    // After redirect back, check if authenticated
     if (this.oauthService.hasValidAccessToken()) {
-      const token = this.oauthService.getAccessToken();
-      const { name, email } = this.oauthService.getIdentityClaims();
+      const claims = this.oauthService.getIdentityClaims() as any;
+      if (claims) {
+        const userData = {
+          name: claims.name,
+          email: claims.email,
+          picture: claims.picture,
+        };
 
-      this.changeObservableVal({
-        success: true,
-        data: {
-          accessToken: token,
-          user: {
-            name,
-            email,
-            role: 'user',
+        this.http.post<ResponseEntity>(`${this.apiUrl}/with-google`, userData).subscribe({
+          next: (response): void => {
+            this.changeObservableVal(response);
+            this.saveUserData(response);
           },
-        },
-      } as ResponseEntity);
-
-      this.saveUserData({
-        success: true,
-        data: {
-          accessToken: token,
-          user: {
-            name,
-            email,
-            role: 'user',
+          error: (err): void => {
+            console.error(err);
+            this.errorMessage.next(err.error.message);
           },
-        },
-      } as ResponseEntity);
+        });
+      }
     }
   }
 
@@ -141,6 +137,7 @@ export class UserAuth {
     // localStorage.setItem('refreshToken', `Bearer ${response.data.refreshToken}`);
     localStorage.setItem('userData', JSON.stringify(response.data.user));
   }
+
   private changeObservableVal(response: ResponseEntity): void {
     this.authStatus.next(response.success);
     this.userProfile.next(response.data);
