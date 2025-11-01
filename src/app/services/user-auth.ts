@@ -18,6 +18,9 @@ export class UserAuth {
     role: 'user',
     refreshToken: '',
     accessToken: '',
+    cart: [],
+    watchLater: [],
+    purchaseCourses: [],
   };
   private apiUrl = 'http://localhost:3000/api/auth';
 
