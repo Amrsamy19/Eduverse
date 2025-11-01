@@ -5,6 +5,7 @@ import { UserAuth } from '../../services/user-auth';
 import { Observable } from 'rxjs';
 import { CartService } from '../../services/cart-service';
 import { ICourse } from '../../Interfaces/icourse';
+import IUser from '../../Interfaces/IUser';
 
 @Component({
   selector: 'app-header',
@@ -16,7 +17,7 @@ export class Header implements OnInit {
   isProfileShown = signal(false);
   isCartShown = signal(false);
   isMenuOpen = false;
-  userData = JSON.parse(localStorage.getItem('userData') || '{}');
+  userData!: IUser;
   isUserLoggedIn!: Observable<boolean>;
   cartItems!: Observable<ICourse[]>;
 
@@ -141,6 +142,7 @@ export class Header implements OnInit {
     this.isUserLoggedIn = this.userAuth.authStatus$;
     this.cartItems = this.cartService.cartItems$;
     this.cartService.getCartItems();
+    this.userData = JSON.parse(localStorage.getItem('userData') || '{}');
   }
 
   getCartTotal(): number {
@@ -158,6 +160,7 @@ export class Header implements OnInit {
 
   logout() {
     this.userAuth.logout();
+    this.userAuth.googleLogout();
     this.router.navigate(['/home']);
     this.closeAllMenus();
   }

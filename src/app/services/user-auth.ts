@@ -1,10 +1,12 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
+import { OAuthService } from 'angular-oauth2-oidc';
 import { BehaviorSubject } from 'rxjs';
 import ResponseEntity from '../Interfaces/ResponseEntity';
 import LoginCredentials from '../Interfaces/loginCredentials';
 import IUser from '../Interfaces/IUser';
 import registrationCredentials from '../Interfaces/registrationCredentials';
+import { authConfig } from '../app.config';
 
 @Injectable({
   providedIn: 'root',
@@ -19,7 +21,9 @@ export class UserAuth {
   };
   private apiUrl = 'http://localhost:3000/api/auth';
 
-  constructor(private http: HttpClient) {}
+  constructor(private http: HttpClient, private oauthService: OAuthService) {
+    this.googleConfiguration();
+  }
 
   private errorMessage = new BehaviorSubject<string>('');
   errorMessage$ = this.errorMessage.asObservable();
@@ -66,7 +70,7 @@ export class UserAuth {
     this.http
       .post<ResponseEntity>(
         `${this.apiUrl}/logout`,
-        {}, // body of the request
+        {} // body of the request
         // ! added in user interceptor
         // { headers: { authorization: `${localStorage.getItem('userToken')}` } }
       )
@@ -83,6 +87,52 @@ export class UserAuth {
         },
       });
   }
+
+  googleLogin(): void {
+    this.oauthService.initLoginFlow();
+  }
+
+  googleLogout(): void {
+    this.oauthService.logOut();
+  }
+
+  isAuthenticated(): boolean {
+    return this.oauthService.hasValidAccessToken();
+  }
+
+  async googleConfiguration(): Promise<void> {
+    this.oauthService.configure(authConfig);
+    this.oauthService.loadDiscoveryDocumentAndTryLogin();
+    if (this.oauthService.hasValidAccessToken()) {
+      const token = this.oauthService.getAccessToken();
+      const { name, email } = this.oauthService.getIdentityClaims();
+
+      this.changeObservableVal({
+        success: true,
+        data: {
+          accessToken: token,
+          user: {
+            name,
+            email,
+            role: 'user',
+          },
+        },
+      } as ResponseEntity);
+
+      this.saveUserData({
+        success: true,
+        data: {
+          accessToken: token,
+          user: {
+            name,
+            email,
+            role: 'user',
+          },
+        },
+      } as ResponseEntity);
+    }
+  }
+
   private saveUserData(response: ResponseEntity): void {
     localStorage.setItem('userToken', `Bearer ${response.data.accessToken}`);
     // localStorage.setItem('refreshToken', `Bearer ${response.data.refreshToken}`);
