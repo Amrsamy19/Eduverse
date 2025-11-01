@@ -1,60 +1,93 @@
-# Cartella
-a
+# 🎓 Eduverse
 
-This project was generated using [Angular CLI](https://github.com/angular/angular-cli) version 20.3.4.
+Eduverse is a modern e-learning platform built with **Angular** and **Tailwind CSS**.  
+It provides a seamless interface for learners to browse, purchase, and manage online courses — including authentication, cart management, and personalized dashboards.
 
-## Development server
+---
 
-To start a local development server, run:
+## 🚀 Features
+
+- 🔐 **Authentication**
+  - Local sign-in / sign-up
+  - Google OAuth integration (via `angular-oauth2-oidc`)
+- 🧭 **User Dashboard**
+  - View and edit profile
+  - Track purchased courses
+  - Manage cart and “watch later” list
+- 🛒 **Course Management**
+  - Browse available courses
+  - Add to cart / purchase flow
+- 🎨 **Modern UI**
+  - Responsive layout using Tailwind CSS
+  - Component-based structure following Angular best practices
+
+---
+
+## 🧰 Tech Stack
+
+| Layer              | Technology             |
+| ------------------ | ---------------------- |
+| Frontend Framework | Angular v20            |
+| Styling            | Tailwind CSS           |
+| State Management   | RxJS + BehaviorSubject |
+| Auth               | OAuth2 / JWT           |
+| Language           | TypeScript             |
+| HTTP Client        | Angular HttpClient     |
+
+---
+
+## 🗂️ Project Structure
+
+```
+Eduverse/
+├── src/
+│ ├── app/
+│ │ ├── components/
+│ │ ├── pages/
+│ │ ├── services/
+│ │ │ └── user-auth.service.ts
+│ │ ├── interfaces/
+│ │ └── app.module.ts
+│ ├── assets/
+│ ├── environments/
+│ └── main.ts
+├── angular.json
+├── tailwind.config.js
+├── package.json
+└── README.md
+
+```
+
+---
+
+## ⚙️ Getting Started
+
+### 1. Prerequisites
+
+Make sure you have:
+
+- Node.js (v18+ recommended)
+- npm or yarn
+- Angular CLI installed globally
+  ```bash
+  npm install -g @angular/cli
+  ```
+
+````
+
+### 2. Installation
+
+```bash
+   git clone https://github.com/Amrsamy19/Eduverse.git
+   cd Eduverse
+   npm install
+```
+
+3. Run Development Server
 
 ```bash
 ng serve
 ```
 
-Once the server is running, open your browser and navigate to `http://localhost:4200/`. The application will automatically reload whenever you modify any of the source files.
-
-## Code scaffolding
-
-Angular CLI includes powerful code scaffolding tools. To generate a new component, run:
-
-```bash
-ng generate component component-name
-```
-
-For a complete list of available schematics (such as `components`, `directives`, or `pipes`), run:
-
-```bash
-ng generate --help
-```
-
-## Building
-
-To build the project run:
-
-```bash
-ng build
-```
-
-This will compile your project and store the build artifacts in the `dist/` directory. By default, the production build optimizes your application for performance and speed.
-
-## Running unit tests
-
-To execute unit tests with the [Karma](https://karma-runner.github.io) test runner, use the following command:
-
-```bash
-ng test
-```
-
-## Running end-to-end tests
-
-For end-to-end (e2e) testing, run:
-
-```bash
-ng e2e
-```
-
-Angular CLI does not come with an end-to-end testing framework by default. You can choose one that suits your needs.
-
-## Additional Resources
-
-For more information on using the Angular CLI, including detailed command references, visit the [Angular CLI Overview and Command Reference](https://angular.dev/tools/cli) page.
+Link for Backend Server: https://github.com/Marwan-Mamdouh/eduverse-backend/
+````
