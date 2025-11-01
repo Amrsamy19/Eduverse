@@ -73,8 +73,6 @@ Make sure you have:
   npm install -g @angular/cli
   ```
 
-````
-
 ### 2. Installation
 
 ```bash
