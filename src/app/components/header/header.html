@@ -317,6 +317,7 @@
 >
   <div class="p-4">
     <!-- Profile Header -->
+    @if(userData | async){
     <div class="flex items-center gap-3 pb-4 border-b border-white/20">
       <svg
         xmlns="http://www.w3.org/2000/svg"
@@ -335,10 +336,11 @@
         <circle cx="12" cy="12" r="10" />
       </svg>
       <div class="min-w-0 flex-1">
-        <p class="text-lg font-bold text-white truncate">{{ userData.name || 'User' }}</p>
-        <p class="text-sm text-white/70 truncate">{{ userData.email }}</p>
+        <p class="text-lg font-bold text-white truncate">{{ user.name || 'User' }}</p>
+        <p class="text-sm text-white/70 truncate">{{ user.email }}</p>
       </div>
     </div>
+    }
 
     <!-- Profile Actions -->
     <div class="mt-4 space-y-2">

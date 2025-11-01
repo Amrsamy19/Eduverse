@@ -13,6 +13,7 @@ import { authConfig } from '../app.config';
 })
 export class UserAuth {
   private initialData: IUser = {
+    _id: '',
     name: '',
     email: '',
     role: 'user',
@@ -93,7 +94,6 @@ export class UserAuth {
 
   googleLogin(): void {
     this.oauthService.initLoginFlow();
-    console.log('test in login ');
   }
 
   googleLogout(): void {
@@ -115,13 +115,18 @@ export class UserAuth {
         const userData = {
           name: claims.name,
           email: claims.email,
-          picture: claims.picture,
         };
 
         this.http.post<ResponseEntity>(`${this.apiUrl}/with-google`, userData).subscribe({
           next: (response): void => {
             this.changeObservableVal(response);
             this.saveUserData(response);
+
+            const savedUser = JSON.parse(localStorage.getItem('userData') || '{}');
+            if (savedUser && savedUser.email) {
+              this.userProfile.next({ ...savedUser });
+              this.authStatus.next(true);
+            }
           },
           error: (err): void => {
             console.error(err);

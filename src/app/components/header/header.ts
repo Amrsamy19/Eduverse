@@ -17,7 +17,9 @@ export class Header implements OnInit {
   isProfileShown = signal(false);
   isCartShown = signal(false);
   isMenuOpen = false;
-  userData!: IUser;
+  user!: IUser;
+  userData!: Observable<IUser>;
+
   isUserLoggedIn!: Observable<boolean>;
   cartItems!: Observable<ICourse[]>;
 
@@ -150,9 +152,10 @@ export class Header implements OnInit {
 
   ngOnInit() {
     this.isUserLoggedIn = this.userAuth.authStatus$;
-    if (this.userAuth.isLoggedIn) {
-      this.cartItems = this.cartService.cartItems$;
-      this.userData = JSON.parse(localStorage.getItem('userData') || '{}');
+    this.userData = this.userAuth.userProfile$;
+    this.cartItems = this.cartService.cartItems$;
+    if (this.userAuth.isAuthenticated() || this.userAuth.isLoggedIn) {
+      this.user = JSON.parse(localStorage.getItem('userData') || '{}');
       this.cartService.getCartItems();
     }
   }
