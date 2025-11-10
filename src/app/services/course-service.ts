@@ -9,7 +9,7 @@ import ResponseEntity from '../Interfaces/ResponseEntity';
 })
 export class CourseService {
   constructor(private http: HttpClient) {}
-  private apiUrl = 'http://localhost:3000/api/courses';
+  private apiUrl = 'https://eduverse-backend-blush.vercel.app/api/courses';
 
   private courseSubject = new BehaviorSubject<ICourse>({
     _id: '',

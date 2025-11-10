@@ -23,7 +23,7 @@ export class UserAuth {
     watchLater: [],
     purchaseCourses: [],
   };
-  private apiUrl = 'http://localhost:3000/api/auth';
+  private apiUrl = 'https://eduverse-backend-blush.vercel.app/api/auth';
 
   constructor(private http: HttpClient, private oauthService: OAuthService) {
     this.googleConfiguration();

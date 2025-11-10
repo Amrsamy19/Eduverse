@@ -12,8 +12,8 @@ import { Router } from '@angular/router';
 export class CartService {
   constructor(private http: HttpClient) {}
 
-  private apiUrl = 'http://localhost:3000/api/users/cart';
-  private apiPurchaseUrl = 'http://localhost:3000/api/payment/check-out';
+  private apiUrl = 'https://eduverse-backend-blush.vercel.app/api/users/cart';
+  private apiPurchaseUrl = 'https://eduverse-backend-blush.vercel.app/api/payment/check-out';
   private cartItems = new BehaviorSubject<ICourse[]>([]);
   cartItems$ = this.cartItems.asObservable();
 

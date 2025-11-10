@@ -9,7 +9,7 @@ import ResponseEntity from '../Interfaces/ResponseEntity';
 })
 export class WatchLaterService {
   constructor(private http: HttpClient) {}
-  private apiUrl = 'http://localhost:3000/api/users/watch-later';
+  private apiUrl = 'https://eduverse-backend-blush.vercel.app/api/users/watch-later';
 
   private courseWatchLater = new BehaviorSubject<ICourse[]>([]);
   watchLater$ = this.courseWatchLater.asObservable();
