@@ -4,6 +4,7 @@ import { ICourse } from '../Interfaces/icourse';
 import { HttpClient } from '@angular/common/http';
 import ResponseEntity from '../Interfaces/ResponseEntity';
 import IUser from '../Interfaces/IUser';
+import { Router } from '@angular/router';
 
 @Injectable({
   providedIn: 'root',
@@ -12,6 +13,7 @@ export class CartService {
   constructor(private http: HttpClient) {}
 
   private apiUrl = 'http://localhost:3000/api/users/cart';
+  private apiPurchaseUrl = 'http://localhost:3000/api/payment/check-out';
   private cartItems = new BehaviorSubject<ICourse[]>([]);
   cartItems$ = this.cartItems.asObservable();
 
@@ -46,6 +48,27 @@ export class CartService {
       .subscribe({
         next: (response): void => this.cartItems.next(response.data),
         error: (err): void => console.error('Error fetching cart items', err),
+      });
+  }
+
+  purchaseCart() {
+    this.http
+      .post<ResponseEntity>(
+        this.apiPurchaseUrl,
+        { coursesIds: this.cartItems.getValue().map((course) => course._id) },
+        {
+          headers: {
+            'Content-Type': 'application/json',
+            Authorization: `${localStorage.getItem('userToken')}`,
+          },
+        }
+      )
+      .subscribe({
+        next: (response): void => {
+          window.location.href = response.data;
+          this.cartItems.next([]);
+        },
+        error: (err): void => console.error('Error purchasing cart', err),
       });
   }
 
