@@ -172,6 +172,11 @@ export class Header implements OnInit {
     this.cartService.removeFromCart(id);
   }
 
+  checkout(): void {
+    this.cartService.purchaseCart();
+    this.closeAllMenus();
+  }
+
   logout() {
     this.userAuth.logout();
     this.userAuth.googleLogout();
